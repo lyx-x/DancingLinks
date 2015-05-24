@@ -2,24 +2,24 @@ package dlx;
 
 import java.util.LinkedList;
 
-
 public class DLXSearcher {
 	
-	LinkedList<Node> O;
-	Node[] C;
-	Node h;
-	
+	LinkedList<Node> O; // save current result
+	Node[] C; // column nodes
+	Node h; // header
+	LinkedList<LinkedList<Node>> results = new LinkedList<>(); // save all possible results
+
 	public DLXSearcher(boolean[][] matrix, int row, int column) {
-		O = new LinkedList<Node>();
+		O = new LinkedList<>();
 		C = new Node[column];
-		Node[] _C = new Node[column];
+		Node[] _C = new Node[column]; // last node of every column
 		h = new Node(0, -1);
 		
 		Node cursor = h;
-		for (int j = 0 ; j < column ; j++) {
-			Node tmp = new Node(0, 0);
+		for (int j = 0; j < column; j++) {
+			Node tmp = new Node(0, 0); // row and size
 			C[j] = tmp;
-			_C[j] = tmp;
+			_C[j] = tmp; // at first, last node is also the first node
 			cursor.R = tmp;
 			tmp.L = cursor;
 			cursor = tmp;
@@ -30,13 +30,13 @@ public class DLXSearcher {
 		for (int i = 0 ; i < row ; i++) {
 			int j;
 			boolean found = false;
-			Node header = new Node(i + 1, 0);
-			for (j = 0 ; j < column ; j++) {
+			Node header = new Node(i + 1, 0); // row and column
+			for (j = 0; j < column; j++) {
 				if (matrix[i][j]) {
 					if (!found) {
 						found = true;
 						cursor = header;
-						cursor.S = j;
+						cursor.S = j; // set column
 					}
 					else {
 						Node tmp = new Node(i + 1, j);
@@ -51,18 +51,21 @@ public class DLXSearcher {
 					_C[j] = cursor;
 				}
 			}
-			header.L = cursor;
-			cursor.R = header;
+			if (found) { // if there is nothing in the row, do nothing
+				header.L = cursor;
+				cursor.R = header;
+			}
 		}
-		for (int j = 0 ; j < column ; j++) {
+		for (int j = 0; j < column; j++) {
 			_C[j].D = C[j];
 			C[j].U = _C[j];
 		}
 	}
-		
+
+	@SuppressWarnings("unchecked")
 	private void Search(int k) {
 		if (h.R == h)
-			PrintResult();
+			results.add((LinkedList<Node>)O.clone()); // insert a copy of the result
 		else {
 			Node c = ChooseColumn();
 			Node.Cover(c);
@@ -91,11 +94,8 @@ public class DLXSearcher {
 		return h.R;
 	}
 	
-	private void PrintResult() {
-		System.out.println("Result:");
-		for (Node n : O) {
-			System.out.println(n);
-		}
+	public LinkedList<LinkedList<Node>> GetResult() {
+		return results;
 	}
 
 	public void Run() {

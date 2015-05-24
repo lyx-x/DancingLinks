@@ -15,9 +15,9 @@ public class EMC extends Solver {
 				row = Integer.parseInt(size[0]);
 				column = Integer.parseInt(size[1]);
 				matrix = new boolean[row][column];
-				for (int i = 0 ; i < row ; i++) {
+				for (int i = 0; i < row; i++) {
 					String tmp = reader.readLine();
-					for (int j = 0 ; j < column ; j++) {
+					for (int j = 0; j < column; j++) {
 						matrix[i][j] = (tmp.charAt(j) == '1');
 					}
 				}
@@ -27,6 +27,15 @@ public class EMC extends Solver {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void PrintResult() {
+		results.forEach(result -> {
+			System.out.println("EMC Result:");
+			result.forEach(System.out::println);
+		});
+		System.out.println();
 	}
 
 }

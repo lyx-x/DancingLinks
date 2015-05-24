@@ -21,16 +21,6 @@ public class Node {
 		N = n;
 	}
 	
-	public Node (Node l, Node r, Node u, Node d, Node c, int n, int s) {
-		L = l;
-		R = r;
-		U = u;
-		D = d;
-		C = c;
-		N = n;
-		S = s;
-	}
-	
 	public static void Cover(Node c) {
 		c.R.L = c.L;
 		c.L.R = c.R;
