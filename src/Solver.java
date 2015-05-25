@@ -1,22 +1,19 @@
-package solver;
-
-import dlx.DLXSearcher;
-import dlx.Node;
-
 import java.util.LinkedList;
 
 public abstract class Solver {
 	
-	boolean[][] matrix;
-	int row;
-	int column;
-	LinkedList<LinkedList<Node>> results = new LinkedList<>();
+	protected boolean[][] matrix;
+	protected int row;
+	protected int column;
+	protected int secondaries;
+	protected LinkedList<LinkedList<Node>> results = new LinkedList<>();
 
 	public void Run() {
-		DLXSearcher dlx = new DLXSearcher(matrix, row, column);
+		DLXSearcher dlx = new DLXSearcher(matrix, row, column, secondaries);
 		dlx.Run();
 		results = dlx.GetResult();
-		PrintResult();
+		System.out.println(results.size());
+		//PrintResult();
 	}
 	
 	@Override
@@ -30,6 +27,6 @@ public abstract class Solver {
 		return sb.toString();
 	}
 
-	public abstract void PrintResult(); // different interpretations
+	protected abstract void PrintResult(); // different interpretations
 
 }

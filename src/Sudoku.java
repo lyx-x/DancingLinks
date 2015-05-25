@@ -1,22 +1,21 @@
-package solver;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Sudoku extends Solver {
 
-    int dimBoard; // board dimension
-    int dim = 0; // small box dimension
-    int[][] board;
+    private int dimBoard; // board dimension
+    private int dim = 0; // small box dimension
+    private int[][] board;
 
     /*
         There are dimBoard^2 possible positions with different row, column and box
         Every blank can contain up to dimBoard different numbers
      */
 
-    class Position {
+    private class Position {
 
         int row, column, box;
         int index;
@@ -39,6 +38,30 @@ public class Sudoku extends Solver {
 
     }
 
+    public Sudoku() {
+        Scanner in = new Scanner(System.in);
+        dimBoard = Integer.parseInt(in.nextLine());
+        while (dim * dim < dimBoard)
+            dim++;
+        board = new int[dimBoard][dimBoard];
+        for (int i = 0; i < dimBoard; i++) {
+            String[] tmp = in.nextLine().split(" ");
+            for (int j = 0; j < dimBoard; j++)
+                if (tmp[j].equals("*"))
+                    board[i][j] = -1;
+                else
+                    board[i][j] = Integer.parseInt(tmp[j]);
+        }
+    }
+
+    public Sudoku(int _dimBoard, int[][] _board) {
+        dimBoard = _dimBoard;
+        while (dim * dim < dimBoard)
+            dim++;
+        board = _board.clone();
+        MakeEMC();
+    }
+
     public Sudoku(String file) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -55,22 +78,27 @@ public class Sudoku extends Solver {
                         else
                             board[i][j] = Integer.parseInt(tmp[j]);
                 }
-                row = dimBoard * dimBoard * dimBoard;
-                column = dimBoard * dimBoard * 4; // dimBoard ^ 2 + dimBoard * 3 * dimBoard
-                matrix = new boolean[row][column];
-                for (int i = 0; i < dimBoard * dimBoard; i++) {
-                    Position pos = new Position(i);
-                    if (board[pos.row][pos.column] == -1) // there are dimBoard possibilities
-                        for (int j = 0; j < dimBoard; j++)
-                            pos.SetMatrix(j);
-                    else
-                        pos.SetMatrix(board[pos.row][pos.column]); // there is only one possibility
-                }
+                MakeEMC();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void MakeEMC() {
+        secondaries = 0;
+        row = dimBoard * dimBoard * dimBoard;
+        column = dimBoard * dimBoard * 4; // dimBoard ^ 2 + dimBoard * 3 * dimBoard
+        matrix = new boolean[row][column];
+        for (int i = 0; i < dimBoard * dimBoard; i++) {
+            Position pos = new Position(i);
+            if (board[pos.row][pos.column] == -1) // there are dimBoard possibilities
+                for (int j = 0; j < dimBoard; j++)
+                    pos.SetMatrix(j);
+            else
+                pos.SetMatrix(board[pos.row][pos.column]); // there is only one possibility
         }
     }
 
@@ -94,6 +122,5 @@ public class Sudoku extends Solver {
             System.out.println();
         });
     }
-
 
 }
