@@ -1,8 +1,10 @@
+import javafx.util.Pair;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Pavage extends Solver {
 
@@ -10,8 +12,9 @@ public class Pavage extends Solver {
     private int width;
     private boolean[][] board;
     private int pieceCount;
-    private LinkedList<Position> possibilities;
+    private SortedSet<String> possibilities;
     private LinkedList<Piece> pieces;
+    private LinkedList<Pair<Integer,Integer>> pavage;
 
     private class Position {
 
@@ -21,9 +24,20 @@ public class Pavage extends Solver {
         public Position(int _index, int x, int y, int[][] offset) {
             index = _index;
             positions = new int[offset.length];
-            for (int i = 0; i < offset.length; i++) {
-                positions[i] = x + offset[i][0] + (y + offset[i][1]) * width;
-            }
+            for (int i = 0; i < offset.length; i++)
+                positions[i] = pavage.indexOf(new Pair<>(x + offset[i][0], y + offset[i][1]));
+        }
+
+        @Override
+        public String toString() {
+            int[] _row = new int[pieceCount + pavage.size()];
+            _row[index + pavage.size()] = 1;
+            for (int i : positions)
+                _row[i] = 1;
+            StringBuilder sb = new StringBuilder();
+            for (int i : _row)
+                sb.append(i);
+            return sb.toString();
         }
 
     }
@@ -34,9 +48,7 @@ public class Pavage extends Solver {
         private int size;
         private int[][][][] offset;
 
-        public Piece(int _h, int _w, String[] _data, int _index) {
-            int h = _h;
-            int w = _w;
+        public Piece(int h, int w, String[] _data, int _index) {
             index = _index;
             size = 0;
             LinkedList<Integer> xOffset = new LinkedList<>();
@@ -73,18 +85,20 @@ public class Pavage extends Solver {
                 int _y = offset[flip][rotation][i][1] + y;
                 if (_x < 0 || _x >= width || _y < 0 || _y >= height)
                     return false;
+                if (!board[_x][_y])
+                    return false;
             }
             return true;
         }
 
-        public LinkedList<Position> TestPossibilities() {
-            LinkedList<Position> possibilities = new LinkedList<>();
+        public SortedSet<String> TestPossibilities() {
+            SortedSet<String> possibilities = new TreeSet<>();
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                     for (int flip = 0; flip < 2; flip++)
                         for (int rotation = 0; rotation < 4; rotation++)
                             if (HaveSpace(x, y, flip, rotation))
-                                possibilities.add(new Position(index, x, y, offset[flip][rotation]));
+                                possibilities.add(new Position(index, x, y, offset[flip][rotation]).toString());
             return possibilities;
         }
 
@@ -94,14 +108,17 @@ public class Pavage extends Solver {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             try {
-                height = Integer.parseInt(reader.readLine());
                 width = Integer.parseInt(reader.readLine());
-                board = new boolean[height][width];
+                height = Integer.parseInt(reader.readLine());
+                board = new boolean[width][height];
+                pavage = new LinkedList<>();
                 for (int i = 0; i < height; i++) {
                     String tmp = reader.readLine();
                     for (int j = 0; j < width; j++)
-                        if (tmp.charAt(j) == '*')
-                            board[i][j] = true;
+                        if (tmp.charAt(j) == '*') {
+                            board[j][i] = true;
+                            pavage.add(new Pair<>(j, i));
+                        }
                 }
                 pieceCount = Integer.parseInt(reader.readLine());
                 pieces = new LinkedList<>();
@@ -122,20 +139,19 @@ public class Pavage extends Solver {
         }
     }
 
-    public void MakeEMC() {
-        possibilities = new LinkedList<>();
+    private void MakeEMC() {
+        possibilities = new TreeSet<>();
         pieces.forEach(piece -> possibilities.addAll(piece.TestPossibilities()));
         secondaries = 0;
         row = possibilities.size();
-        column = pieceCount + height * width;
+        column = pieceCount + pavage.size();
         matrix = new boolean[row][column];
-        for (int i = 0; i < row; i++) {
-            Position position = possibilities.pollFirst();
-            int index = position.index;
-            matrix[i][index] = true;
-            for (int j : position.positions) {
-                matrix[i][pieceCount + j] = true;
+        int i = 0;
+        for (String position : possibilities) {
+            for (int j = 0; j < position.length(); j++) {
+                matrix[i][j] = (position.charAt(j) == '1');
             }
+            i++;
         }
     }
 

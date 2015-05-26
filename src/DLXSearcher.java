@@ -8,8 +8,10 @@ public class DLXSearcher {
 	private LinkedList<LinkedList<Node>> results = new LinkedList<>(); // save all possible results
 	private int secondaries;
 	private int skipped;
+	private int resultCount;
 
 	public DLXSearcher(boolean[][] matrix, int row, int column, int _secondaries) {
+		resultCount = 0;
 		secondaries = _secondaries;
 		skipped = 0;
 		O = new LinkedList<>();
@@ -65,8 +67,11 @@ public class DLXSearcher {
 
 	@SuppressWarnings("unchecked")
 	private void Search(int k) {
-		if (h.R == h)
-			results.add((LinkedList<Node>) O.clone()); // insert a copy of the result
+		if (h.R == h) {
+			resultCount++;
+			//System.out.println(resultCount);
+			//results.add((LinkedList<Node>) O.clone()); // insert a copy of the result
+		}
 		else {
 			Node c = ChooseColumn();
 			for (int i = 0; i < 2; i++) {
@@ -110,6 +115,10 @@ public class DLXSearcher {
 
 	public LinkedList<LinkedList<Node>> GetResult() {
 		return results;
+	}
+
+	public int GetResultCount() {
+		return resultCount;
 	}
 
 	private Node ChooseColumn() {

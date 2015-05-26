@@ -1,15 +1,19 @@
 public class Main {
 
-	final static String EMCFile = "tests/EMC.problem";
+	final static String EMCFile = "tests/emc/queens8.txt";
 	final static String SudokuFile = "tests/Sudoku.problem";
 	final static String PavageFile = "tests/Pavage.problem";
+	//final static String PavageFile = "tests/pavage/pentaminos_3_20.txt";
 
 	public static void main(String[] args) {
 		switch (args.length) {
 			case 0:
 				System.out.println("Default Test:");
-				new EMC(EMCFile).Run();
-				new Sudoku(SudokuFile).Run();
+				//new EMC(EMCFile).Run();
+				//new Sudoku(SudokuFile).Run();
+				//System.out.println(new Sudoku(SudokuFile));
+				new Pavage(PavageFile).Run();
+				//System.out.println(new Pavage(PavageFile));
 				break;
 			case 1:
 				switch (args[0]) {
