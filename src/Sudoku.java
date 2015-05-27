@@ -115,15 +115,15 @@ public class Sudoku extends Solver {
     @Override
     protected void ShowResult() {
         JFrame window = new JFrame("Sudoku Result Viewer");
-        int height = 650;
+        int height = 675;
         int width = 600;
         window.setBounds(100, 50, width, height);
         window.setResizable(true);
         window.setLayout(new FlowLayout());
 
         JPanel controlPanel = new JPanel(new GridBagLayout());
-        controlPanel.setMinimumSize(new Dimension(550, 55));
-        controlPanel.setPreferredSize(new Dimension(550, 55));
+        controlPanel.setMinimumSize(new Dimension(width, 55));
+        controlPanel.setPreferredSize(new Dimension(width, 55));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(25, 15, 25, 10));
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -142,8 +142,8 @@ public class Sudoku extends Solver {
             default:
                 resultsLabel.setText(String.format("There are %d solutions.", results.size()));
         }
-        resultsLabel.setMinimumSize(new Dimension(550, 25));
-        resultsLabel.setPreferredSize(new Dimension(550, 25));
+        resultsLabel.setMinimumSize(new Dimension(width, 25));
+        resultsLabel.setPreferredSize(new Dimension(width, 25));
         controlPanel.add(resultsLabel, constraints);
 
         constraints.gridx = 0;
@@ -172,7 +172,10 @@ public class Sudoku extends Solver {
         JButton submit = new JButton("OK");
         submit.setMinimumSize(new Dimension(40, 25));
         submit.setPreferredSize(new Dimension(40, 25));
-        submit.setEnabled(true);
+        if (results.size() > 0)
+            submit.setEnabled(true);
+        else
+            submit.setEnabled(false);
         submit.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,8 +200,8 @@ public class Sudoku extends Solver {
         controlPanel.add(submit, constraints);
 
         JPanel boardPanel = new JPanel(new GridLayout(dimBoard, dimBoard));
-        boardPanel.setMinimumSize(new Dimension(550, 550));
-        boardPanel.setPreferredSize(new Dimension(550, 550));
+        boardPanel.setMinimumSize(new Dimension(width, height - 75));
+        boardPanel.setPreferredSize(new Dimension(width, height - 75));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(25, 10, 25, 15));
 
         numberLabels = new JLabel[dimBoard][dimBoard];
@@ -231,8 +234,8 @@ public class Sudoku extends Solver {
                 }
                 numberLabel.setHorizontalAlignment(JLabel.CENTER);
                 numberLabel.setVerticalAlignment(JLabel.CENTER);
-                numberLabel.setMinimumSize(new Dimension(550 / dimBoard, 550 / dimBoard));
-                numberLabel.setPreferredSize(new Dimension(550 / dimBoard, 550 / dimBoard));
+                numberLabel.setMinimumSize(new Dimension(width / dimBoard, width / dimBoard));
+                numberLabel.setPreferredSize(new Dimension(width / dimBoard, width / dimBoard));
                 boardPanel.add(numberLabel);
             }
 

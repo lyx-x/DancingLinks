@@ -1,4 +1,8 @@
 import javafx.util.Pair;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.*;
 
@@ -7,10 +11,12 @@ public class Pavage extends Solver {
     private int height;
     private int width;
     private boolean[][] board;
+    private JLabel[][] pavageLabels;
     private int pieceCount;
     private SortedSet<String> possibilities;
     private LinkedList<Piece> pieces;
-    private LinkedList<Pair<Integer,Integer>> pavage;
+    private LinkedList<Pair<Integer, Integer>> pavage;
+    private Color[] colors = {Color.CYAN, Color.GREEN, Color.BLUE, Color.DARK_GRAY, Color.MAGENTA, Color.GRAY, Color.ORANGE, Color.LIGHT_GRAY, Color.PINK, Color.BLACK, Color.RED, Color.YELLOW};
 
     private class Position {
 
@@ -200,7 +206,131 @@ public class Pavage extends Solver {
 
     @Override
     protected void ShowResult() {
+        JFrame window = new JFrame("Pavage Result Viewer");
+        int windowWidth = 600;
+        int windowHeight = (height / 9.0f > width / 16.0f) ? 700 : windowWidth * height / width + 80;
+        window.setBounds(100, 50, windowWidth, windowHeight);
+        window.setResizable(true);
+        window.setLayout(new FlowLayout());
 
+        JPanel controlPanel = new JPanel(new GridBagLayout());
+        controlPanel.setMinimumSize(new Dimension(windowWidth, 60));
+        controlPanel.setPreferredSize(new Dimension(windowWidth, 60));
+        controlPanel.setBorder(BorderFactory.createEmptyBorder(25, 15, 25, 10));
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 3;
+
+        JLabel resultsLabel = new JLabel();
+        switch (results.size()) {
+            case 0:
+                resultsLabel.setText("No solution!");
+                break;
+            case 1:
+                resultsLabel.setText("There is only 1 solution.");
+                break;
+            default:
+                resultsLabel.setText(String.format("There are %d solutions.", results.size()));
+        }
+        resultsLabel.setMinimumSize(new Dimension(550, 25));
+        resultsLabel.setPreferredSize(new Dimension(550, 25));
+        controlPanel.add(resultsLabel, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.weightx = 0.6;
+
+        JLabel chooseLabel = new JLabel(String.format("Please enter a number between 1 and %d:", results.size()));
+        chooseLabel.setMinimumSize(new Dimension(300, 18));
+        chooseLabel.setPreferredSize(new Dimension(300, 18));
+        controlPanel.add(chooseLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(4, 20, 0, 20);
+
+        JTextArea chooseText = new JTextArea("1");
+        chooseText.setMinimumSize(new Dimension(40, 18));
+        chooseText.setPreferredSize(new Dimension(40, 18));
+        controlPanel.add(chooseText, constraints);
+
+        constraints.gridx = 2;
+        constraints.insets = new Insets(2, 20, 0, 20);
+
+        JButton submit = new JButton("OK");
+        submit.setMinimumSize(new Dimension(40, 25));
+        submit.setPreferredSize(new Dimension(40, 25));
+        if (results.size() > 0)
+            submit.setEnabled(true);
+        else
+            submit.setEnabled(false);
+        submit.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = 0;
+                try {
+                    index = Integer.parseInt(chooseText.getText());
+                    index--;
+                    if (index < 0 || index >= results.size())
+                        throw new ArrayIndexOutOfBoundsException();
+                } catch (Exception error) {
+                    error.printStackTrace();
+                }
+                LinkedList<Node> result = results.get(index);
+                result.forEach(node -> {
+                    int r = node.N - 1;
+                    int _index = -1;
+                    for (int i = pavage.size(); i < column; i++)
+                        if (matrix[r][i]) {
+                            _index = i - pavage.size();
+                            break;
+                        }
+                    for (int i = 0; i < pavage.size(); i++)
+                        if (matrix[r][i]) {
+                            Pair<Integer, Integer> pos = pavage.get(i);
+                            pavageLabels[pos.getKey()][pos.getValue()].setBackground(colors[_index % 12]);
+                        }
+                });
+            }
+        });
+        controlPanel.add(submit, constraints);
+
+        JPanel boardPanel = new JPanel(new GridLayout(height, width));
+        int pavageDimension;
+        if (height > width) {
+            boardPanel.setMinimumSize(new Dimension((windowHeight - 80) * width / height, windowHeight - 80));
+            boardPanel.setPreferredSize(new Dimension((windowHeight - 80) * width / height, windowHeight - 80));
+            pavageDimension = (windowHeight - 80) / height;
+        }
+        else {
+            boardPanel.setMinimumSize(new Dimension(windowWidth, windowWidth * height / width));
+            boardPanel.setPreferredSize(new Dimension(windowWidth, windowWidth * height / width));
+            window.setBounds(100, 50, windowWidth, windowWidth * height / width + 120);
+            pavageDimension = windowWidth / width;
+        }
+        controlPanel.setBorder(BorderFactory.createEmptyBorder(25, 10, 25, 15));
+
+        pavageLabels = new JLabel[width][height];
+
+        for (int j = 0; j < height; j++)
+            for (int i = 0; i < width; i++) {
+                JLabel pavageLabel = new JLabel();
+                pavageLabels[i][j] = pavageLabel;
+                if (!board[i][j])
+                    pavageLabel.setBackground(Color.WHITE);
+                pavageLabel.setOpaque(true);
+                pavageLabel.setMinimumSize(new Dimension(pavageDimension, pavageDimension));
+                pavageLabel.setPreferredSize(new Dimension(pavageDimension, pavageDimension));
+                boardPanel.add(pavageLabel);
+            }
+
+        window.add(controlPanel);
+        window.add(boardPanel);
+        window.setVisible(true);
     }
 
 }

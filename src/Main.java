@@ -3,8 +3,8 @@ import java.io.FileNotFoundException;
 public class Main {
 
 	final static String EMCFile = "tests/emc/queens8.txt";
-	final static String SudokuFile = "tests/sudoku/sudoku9.txt";
-	final static String PavageFile = "tests/pavage/pentaminos_3_20.txt";
+	final static String SudokuFile = "tests/sudoku/sudoku16_0.txt";
+	final static String PavageFile = "tests/pavage/tetris_5_8.txt";
 
 	public static void main(String[] args) {
 		switch (args.length) {
@@ -39,7 +39,7 @@ public class Main {
 						try {
 							System.out.println("Default Test:");
 							System.out.println(EMCFile);
-							new EMC(EMCFile).RunDemo();
+							//new EMC(EMCFile).RunDemo();
 							System.out.println(SudokuFile);
 							new Sudoku(SudokuFile).RunDemo();
 							System.out.println(PavageFile);
