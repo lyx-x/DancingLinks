@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 public class Main {
 
 	final static String EMCFile = "tests/emc/queens8.txt";
-	final static String SudokuFile = "tests/sudoku/sudoku16_0.txt";
+	final static String SudokuFile = "tests/sudoku/sudoku9.txt";
 	final static String PavageFile = "tests/pavage/pentaminos_3_20.txt";
 
 	public static void main(String[] args) {
