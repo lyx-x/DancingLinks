@@ -1,9 +1,5 @@
 import javafx.util.Pair;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Pavage extends Solver {
@@ -104,37 +100,41 @@ public class Pavage extends Solver {
 
     }
 
-    public Pavage(String file) {
+    public Pavage() {
+        this(new InputStreamReader(System.in));
+    }
+
+    public Pavage(String file) throws FileNotFoundException {
+        this(new FileReader(file));
+    }
+
+    public Pavage(Reader stream) {
+        BufferedReader reader = new BufferedReader(stream);
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            try {
-                width = Integer.parseInt(reader.readLine());
-                height = Integer.parseInt(reader.readLine());
-                board = new boolean[width][height];
-                pavage = new LinkedList<>();
-                for (int i = 0; i < height; i++) {
-                    String tmp = reader.readLine();
-                    for (int j = 0; j < width; j++)
-                        if (tmp.charAt(j) == '*') {
-                            board[j][i] = true;
-                            pavage.add(new Pair<>(j, i));
-                        }
-                }
-                pieceCount = Integer.parseInt(reader.readLine());
-                pieces = new LinkedList<>();
-                for (int i = 0; i < pieceCount; i++) {
-                    int w = Integer.parseInt(reader.readLine());
-                    int h = Integer.parseInt(reader.readLine());
-                    String[] _data = new String[h];
-                    for (int j = 0; j < h; j++)
-                        _data[j] = reader.readLine();
-                    pieces.add(new Piece(h, w, _data, i));
-                }
-                MakeEMC();
-            } catch (IOException e) {
-                e.printStackTrace();
+            width = Integer.parseInt(reader.readLine());
+            height = Integer.parseInt(reader.readLine());
+            board = new boolean[width][height];
+            pavage = new LinkedList<>();
+            for (int i = 0; i < height; i++) {
+                String tmp = reader.readLine();
+                for (int j = 0; j < width; j++)
+                    if (tmp.charAt(j) == '*') {
+                        board[j][i] = true;
+                        pavage.add(new Pair<>(j, i));
+                    }
             }
-        } catch (FileNotFoundException e) {
+            pieceCount = Integer.parseInt(reader.readLine());
+            pieces = new LinkedList<>();
+            for (int i = 0; i < pieceCount; i++) {
+                int w = Integer.parseInt(reader.readLine());
+                int h = Integer.parseInt(reader.readLine());
+                String[] _data = new String[h];
+                for (int j = 0; j < h; j++)
+                    _data[j] = reader.readLine();
+                pieces.add(new Piece(h, w, _data, i));
+            }
+            MakeEMC();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -156,7 +156,12 @@ public class Pavage extends Solver {
     }
 
     @Override
-    protected void PrintResult() {
+    protected void PrintAllResult() {
+
+    }
+
+    @Override
+    protected void ShowOneResult(int i) {
 
     }
 

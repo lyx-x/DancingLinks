@@ -21,7 +21,7 @@ public class DLXSearcher {
 		
 		Node cursor = h;
 		for (int j = 0; j < column; j++) {
-			Node tmp = new Node(0, j); // row and size
+			Node tmp = new Node(j, 0); // column and size
 			C[j] = tmp;
 			_C[j] = tmp; // at first, last node is also the first node
 			cursor.R = tmp;
@@ -49,6 +49,7 @@ public class DLXSearcher {
 						cursor = tmp;
 					}
 					cursor.C = C[j];
+					C[j].S++;
 					cursor.U = _C[j];
 					_C[j].D = cursor;
 					_C[j] = cursor;
@@ -69,8 +70,7 @@ public class DLXSearcher {
 	private void Search(int k) {
 		if (h.R == h) {
 			resultCount++;
-			//System.out.println(resultCount);
-			//results.add((LinkedList<Node>) O.clone()); // insert a copy of the result
+			results.add((LinkedList<Node>) O.clone()); // insert a copy of the result
 		}
 		else {
 			Node c = ChooseColumn();
@@ -122,7 +122,18 @@ public class DLXSearcher {
 	}
 
 	private Node ChooseColumn() {
-		return h.R;
+
+		int minimum = Integer.MAX_VALUE;
+		int index = -1;
+		Node cursor = h.R;
+		while (cursor != h) {
+			if (cursor.S < minimum) {
+				minimum = cursor.S;
+				index = cursor.N;
+			}
+			cursor = cursor.R;
+		}
+		return C[index];
 	}
 	
 	private void Cover(Node c) {
@@ -134,6 +145,7 @@ public class DLXSearcher {
 			while (j != r) {
 				j.D.U = j.U;
 				j.U.D = j.D;
+				j.C.S--;
 				j = j.R;
 			}
 			r = r.D;
@@ -147,17 +159,13 @@ public class DLXSearcher {
 			while (j != r) {
 				j.D.U = j;
 				j.U.D = j;
+				j.C.S++;
 				j = j.L;
 			}
 			r = r.U;
 		}
 		c.R.L = c;
 		c.L.R = c;
-	}
-
-	private void PrintStatus() {
-		O.forEach(node -> System.err.format("%d ", node.N));
-		System.err.println();
 	}
 
 }

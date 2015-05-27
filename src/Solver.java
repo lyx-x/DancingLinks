@@ -11,10 +11,15 @@ public abstract class Solver {
 	public void Run() {
 		DLXSearcher dlx = new DLXSearcher(matrix, row, column, secondaries);
 		dlx.Run();
-		//results = dlx.GetResult();
-		//System.out.println(results.size());
 		System.out.println(dlx.GetResultCount());
-		//PrintResult();
+	}
+
+	public void RunDemo() {
+		DLXSearcher dlx = new DLXSearcher(matrix, row, column, secondaries);
+		dlx.Run();
+		System.out.println(dlx.GetResultCount());
+		results = dlx.GetResult();
+		ShowOneResult(0);
 	}
 	
 	@Override
@@ -32,6 +37,8 @@ public abstract class Solver {
 		return sb.toString();
 	}
 
-	protected abstract void PrintResult(); // different interpretations
+	protected abstract void PrintAllResult(); // different interpretations
+
+	protected abstract void ShowOneResult(int i); // different interpretations
 
 }

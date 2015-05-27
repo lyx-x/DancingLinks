@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Sudoku extends Solver {
@@ -39,18 +36,31 @@ public class Sudoku extends Solver {
     }
 
     public Sudoku() {
-        Scanner in = new Scanner(System.in);
-        dimBoard = Integer.parseInt(in.nextLine());
-        while (dim * dim < dimBoard)
-            dim++;
-        board = new int[dimBoard][dimBoard];
-        for (int i = 0; i < dimBoard; i++) {
-            String[] tmp = in.nextLine().split(" ");
-            for (int j = 0; j < dimBoard; j++)
-                if (tmp[j].equals("*"))
-                    board[i][j] = -1;
-                else
-                    board[i][j] = Integer.parseInt(tmp[j]);
+        this(new InputStreamReader(System.in));
+    }
+
+    public Sudoku(String file) throws FileNotFoundException {
+        this(new FileReader(file));
+    }
+
+    public Sudoku(Reader stream) {
+        BufferedReader reader = new BufferedReader(stream);
+        try {
+            dimBoard = Integer.parseInt(reader.readLine());
+            while (dim * dim < dimBoard)
+                dim++;
+            board = new int[dimBoard][dimBoard];
+            for (int i = 0; i < dimBoard; i++) {
+                String[] tmp = reader.readLine().split(" ");
+                for (int j = 0; j < dimBoard; j++)
+                    if (tmp[j].equals("*"))
+                        board[i][j] = -1;
+                    else
+                        board[i][j] = Integer.parseInt(tmp[j]);
+            }
+            MakeEMC();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -60,31 +70,6 @@ public class Sudoku extends Solver {
             dim++;
         board = _board.clone();
         MakeEMC();
-    }
-
-    public Sudoku(String file) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            try {
-                dimBoard = Integer.parseInt(reader.readLine());
-                while (dim * dim < dimBoard)
-                    dim++;
-                board = new int[dimBoard][dimBoard];
-                for (int i = 0; i < dimBoard; i++) {
-                    String[] tmp = reader.readLine().split(" ");
-                    for (int j = 0; j < dimBoard; j++)
-                        if (tmp[j].equals("*"))
-                            board[i][j] = -1;
-                        else
-                            board[i][j] = Integer.parseInt(tmp[j]);
-                }
-                MakeEMC();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     private void MakeEMC() {
@@ -103,7 +88,7 @@ public class Sudoku extends Solver {
     }
 
     @Override
-    public void PrintResult() {
+    public void PrintAllResult() {
         results.forEach(result -> {
             System.out.println("Sudoku Result:");
             result.forEach(node -> {
@@ -121,6 +106,11 @@ public class Sudoku extends Solver {
             }
             System.out.println();
         });
+    }
+
+    @Override
+    protected void ShowOneResult(int i) {
+
     }
 
 }
