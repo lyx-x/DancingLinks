@@ -12,11 +12,11 @@ public class Main {
 				try {
 					System.out.println("Default Test:");
 					System.out.println(EMCFile);
-					new EMC(EMCFile).Run();
+					new EMC(EMCFile).RunTest();
 					System.out.println(SudokuFile);
-					new Sudoku(SudokuFile).Run();
+					new Sudoku(SudokuFile).RunTest();
 					System.out.println(PavageFile);
-					new Pavage(PavageFile).Run();
+					new Pavage(PavageFile).RunTest();
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -34,6 +34,19 @@ public class Main {
 					case "pavage":
 						System.out.println("Pavage Test: Please enter the problem");
 						new Pavage().Run();
+						break;
+					case "demo":
+						try {
+							System.out.println("Default Test:");
+							System.out.println(EMCFile);
+							new EMC(EMCFile).RunDemo();
+							System.out.println(SudokuFile);
+							new Sudoku(SudokuFile).RunDemo();
+							System.out.println(PavageFile);
+							new Pavage(PavageFile).RunDemo();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
 						break;
 					default:
 						System.out.println("Wrong argument!");

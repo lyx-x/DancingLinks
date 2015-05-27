@@ -29,13 +29,6 @@ public class EMC extends Solver {
 		}
 	}
 
-	public EMC(int _row, int _column, boolean[][] _matrix, int _secondaries) {
-		row = _row;
-		column = _column;
-		matrix = _matrix.clone();
-		secondaries = _secondaries;
-	}
-
 	@Override
 	public void PrintAllResult() {
 		results.forEach(result -> {
@@ -46,7 +39,13 @@ public class EMC extends Solver {
 	}
 
 	@Override
-	protected void ShowOneResult(int i) {
+	protected void PrintOneResult(int i) {
+		System.out.println("EMC Result 1:");
+		results.get(i).forEach(System.out::println);
+	}
+
+	@Override
+	protected void ShowResult() {
 
 	}
 

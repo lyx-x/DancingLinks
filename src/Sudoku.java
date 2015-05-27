@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.Scanner;
+import java.util.LinkedList;
 
 public class Sudoku extends Solver {
 
@@ -64,14 +64,6 @@ public class Sudoku extends Solver {
         }
     }
 
-    public Sudoku(int _dimBoard, int[][] _board) {
-        dimBoard = _dimBoard;
-        while (dim * dim < dimBoard)
-            dim++;
-        board = _board.clone();
-        MakeEMC();
-    }
-
     private void MakeEMC() {
         secondaries = 0;
         row = dimBoard * dimBoard * dimBoard;
@@ -87,29 +79,37 @@ public class Sudoku extends Solver {
         }
     }
 
-    @Override
-    public void PrintAllResult() {
-        results.forEach(result -> {
-            System.out.println("Sudoku Result:");
-            result.forEach(node -> {
-                int index = (node.N - 1) % (dimBoard * dimBoard);
-                Position pos = new Position(index);
-                int val = (node.N - 1) / (dimBoard * dimBoard); // get the number from row number
-                board[pos.row][pos.column] = val;
-            });
-            for (int i = 0; i < dimBoard; i++) {
-                for (int j = 0; j < dimBoard; j++) {
-                    System.out.print(board[i][j]);
-                    System.out.print(' ');
-                }
-                System.out.println();
+    private void PrintResult(LinkedList<Node> result) {
+        result.forEach(node -> {
+            int index = (node.N - 1) % (dimBoard * dimBoard);
+            Position pos = new Position(index);
+            int val = (node.N - 1) / (dimBoard * dimBoard); // get the number from row number
+            board[pos.row][pos.column] = val;
+        });
+        for (int i = 0; i < dimBoard; i++) {
+            for (int j = 0; j < dimBoard; j++) {
+                System.out.print(board[i][j]);
+                System.out.print(' ');
             }
             System.out.println();
-        });
+        }
+        System.out.println();
     }
 
     @Override
-    protected void ShowOneResult(int i) {
+    public void PrintAllResult() {
+        System.out.println("Sudoku Result:");
+        results.forEach(this::PrintResult);
+    }
+
+    @Override
+    protected void PrintOneResult(int i) {
+        System.out.println("Sudoku Result 1:");
+        PrintResult(results.get(i));
+    }
+
+    @Override
+    protected void ShowResult() {
 
     }
 

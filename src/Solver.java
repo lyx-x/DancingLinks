@@ -12,14 +12,20 @@ public abstract class Solver {
 		DLXSearcher dlx = new DLXSearcher(matrix, row, column, secondaries);
 		dlx.Run();
 		System.out.println(dlx.GetResultCount());
+		results = dlx.GetResult();
 	}
 
 	public void RunDemo() {
-		DLXSearcher dlx = new DLXSearcher(matrix, row, column, secondaries);
-		dlx.Run();
-		System.out.println(dlx.GetResultCount());
-		results = dlx.GetResult();
-		ShowOneResult(0);
+		Run();
+		ShowResult();
+	}
+
+	public void RunTest() {
+		Run();
+		if (results.size() <= 10)
+			PrintAllResult();
+		else if (results.size() >= 0)
+			PrintOneResult(0);
 	}
 	
 	@Override
@@ -39,6 +45,8 @@ public abstract class Solver {
 
 	protected abstract void PrintAllResult(); // different interpretations
 
-	protected abstract void ShowOneResult(int i); // different interpretations
+	protected abstract void PrintOneResult(int i);
+
+	protected abstract void ShowResult();
 
 }

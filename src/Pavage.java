@@ -155,13 +155,51 @@ public class Pavage extends Solver {
         }
     }
 
-    @Override
-    protected void PrintAllResult() {
-
+    private void PrintResult(LinkedList<Node> result) {
+        char[][] resultBoard = new char[width][height];
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                if (board[i][j])
+                    resultBoard[i][j] = 'a';
+                else
+                    resultBoard[i][j] = ' ';
+        result.forEach(node -> {
+            int r = node.N - 1;
+            int index = -1;
+            for (int i = pavage.size(); i < column; i++)
+                if (matrix[r][i]) {
+                    index = i - pavage.size();
+                    break;
+                }
+            for (int i = 0; i < pavage.size(); i++)
+                if (matrix[r][i]) {
+                    Pair<Integer, Integer> pos = pavage.get(i);
+                    resultBoard[pos.getKey()][pos.getValue()] += index;
+                }
+        });
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++)
+                sb.append(resultBoard[j][i]);
+            sb.append('\n');
+        }
+        System.out.println(sb.toString());
     }
 
     @Override
-    protected void ShowOneResult(int i) {
+    protected void PrintAllResult() {
+        System.out.println("Pavage Result:");
+        results.forEach(this::PrintResult);
+    }
+
+    @Override
+    protected void PrintOneResult(int i) {
+        System.out.println("Pavage Result 1:");
+        PrintResult(results.get(i));
+    }
+
+    @Override
+    protected void ShowResult() {
 
     }
 
