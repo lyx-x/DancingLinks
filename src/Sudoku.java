@@ -108,7 +108,7 @@ public class Sudoku extends Solver {
 
     @Override
     protected void PrintOneResult(int i) {
-        System.out.println("Sudoku Result 1:");
+        System.out.println(String.format("Sudoku Result %d:", i + 1));
         PrintResult(results.get(i));
     }
 
@@ -174,8 +174,10 @@ public class Sudoku extends Solver {
         submit.setPreferredSize(new Dimension(40, 25));
         if (results.size() > 0)
             submit.setEnabled(true);
-        else
+        else {
             submit.setEnabled(false);
+            chooseLabel.setText("Nothing to show.");
+        }
         submit.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {

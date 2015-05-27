@@ -146,9 +146,9 @@ public class Pavage extends Solver {
     }
 
     private void MakeEMC() {
-        possibilities = new TreeSet<>();
+        possibilities = new TreeSet<>(); // try to eliminate redundancy
         pieces.forEach(piece -> possibilities.addAll(piece.TestPossibilities()));
-        secondaries = 0;
+        secondaries = 0; // cover all square
         row = possibilities.size();
         column = pieceCount + pavage.size();
         matrix = new boolean[row][column];
@@ -172,15 +172,15 @@ public class Pavage extends Solver {
         result.forEach(node -> {
             int r = node.N - 1;
             int index = -1;
-            for (int i = pavage.size(); i < column; i++)
+            for (int i = pavage.size(); i < column; i++) // find index
                 if (matrix[r][i]) {
                     index = i - pavage.size();
                     break;
                 }
-            for (int i = 0; i < pavage.size(); i++)
+            for (int i = 0; i < pavage.size(); i++) // find position
                 if (matrix[r][i]) {
                     Pair<Integer, Integer> pos = pavage.get(i);
-                    resultBoard[pos.getKey()][pos.getValue()] += index;
+                    resultBoard[pos.getKey()][pos.getValue()] += index; // mark the square with a symbol
                 }
         });
         StringBuilder sb = new StringBuilder();
@@ -200,7 +200,7 @@ public class Pavage extends Solver {
 
     @Override
     protected void PrintOneResult(int i) {
-        System.out.println("Pavage Result 1:");
+        System.out.println(String.format("Pavage Result %d:", i + 1));
         PrintResult(results.get(i));
     }
 
@@ -266,8 +266,10 @@ public class Pavage extends Solver {
         submit.setPreferredSize(new Dimension(40, 25));
         if (results.size() > 0)
             submit.setEnabled(true);
-        else
+        else {
             submit.setEnabled(false);
+            chooseLabel.setText("Nothing to show.");
+        }
         submit.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -292,7 +294,7 @@ public class Pavage extends Solver {
                     for (int i = 0; i < pavage.size(); i++)
                         if (matrix[r][i]) {
                             Pair<Integer, Integer> pos = pavage.get(i);
-                            pavageLabels[pos.getKey()][pos.getValue()].setBackground(colors[_index % 12]);
+                            pavageLabels[pos.getKey()][pos.getValue()].setBackground(colors[_index % 12]); // set different color
                         }
                 });
             }

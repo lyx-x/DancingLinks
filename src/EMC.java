@@ -40,7 +40,7 @@ public class EMC extends Solver {
 
 	@Override
 	protected void PrintOneResult(int i) {
-		System.out.println("EMC Result 1:");
+		System.out.println(String.format("EMC Result %d:", i + 1));
 		results.get(i).forEach(System.out::println);
 	}
 
