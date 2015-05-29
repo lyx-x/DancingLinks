@@ -43,9 +43,17 @@ public abstract class Solver {
 		return sb.toString();
 	}
 
-	protected abstract void PrintAllResult(); // different interpretations
+	private void PrintAllResult() {
+		System.out.format("%s Results:\n", this.getClass().getName());
+		results.forEach(this::PrintResult);
+	}
 
-	protected abstract void PrintOneResult(int i);
+	private void PrintOneResult(int i) {
+		System.out.println(String.format("%s Result n°%d:", this.getClass().getName(), i + 1));
+		results.get(i).forEach(System.out::println);
+	}
+
+	protected abstract void PrintResult(LinkedList<Node> result); // different interpretations
 
 	protected abstract void ShowResult();
 

@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.LinkedList;
 
 public class EMC extends Solver {
 
@@ -30,18 +31,8 @@ public class EMC extends Solver {
 	}
 
 	@Override
-	public void PrintAllResult() {
-		results.forEach(result -> {
-			System.out.println("EMC Result:");
-			result.forEach(System.out::println);
-		});
-		System.out.println();
-	}
-
-	@Override
-	protected void PrintOneResult(int i) {
-		System.out.println(String.format("EMC Result %d:", i + 1));
-		results.get(i).forEach(System.out::println);
+	protected void PrintResult(LinkedList<Node> result) {
+		result.forEach(System.out::println);
 	}
 
 	@Override

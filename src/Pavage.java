@@ -179,7 +179,8 @@ public class Pavage extends Solver {
         }
     }
 
-    private void PrintResult(LinkedList<Node> result) {
+    @Override
+    protected void PrintResult(LinkedList<Node> result) {
         char[][] resultBoard = new char[width][height];
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
@@ -208,18 +209,6 @@ public class Pavage extends Solver {
             sb.append('\n');
         }
         System.out.println(sb.toString());
-    }
-
-    @Override
-    protected void PrintAllResult() {
-        System.out.println("Pavage Result:");
-        results.forEach(this::PrintResult);
-    }
-
-    @Override
-    protected void PrintOneResult(int i) {
-        System.out.println(String.format("Pavage Result %d:", i + 1));
-        PrintResult(results.get(i));
     }
 
     @Override

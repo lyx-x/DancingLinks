@@ -83,7 +83,8 @@ public class Sudoku extends Solver {
         }
     }
 
-    private void PrintResult(LinkedList<Node> result) {
+    @Override
+    protected void PrintResult(LinkedList<Node> result) {
         result.forEach(node -> {
             int index = (node.N - 1) % (dimBoard * dimBoard);
             Position pos = new Position(index);
@@ -98,18 +99,6 @@ public class Sudoku extends Solver {
             System.out.println();
         }
         System.out.println();
-    }
-
-    @Override
-    public void PrintAllResult() {
-        System.out.println("Sudoku Result:");
-        results.forEach(this::PrintResult);
-    }
-
-    @Override
-    protected void PrintOneResult(int i) {
-        System.out.println(String.format("Sudoku Result %d:", i + 1));
-        PrintResult(results.get(i));
     }
 
     @Override
