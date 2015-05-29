@@ -50,7 +50,7 @@ public abstract class Solver {
 
 	private void PrintOneResult(int i) {
 		System.out.println(String.format("%s Result n°%d:", this.getClass().getName(), i + 1));
-		results.get(i).forEach(System.out::println);
+		PrintResult(results.get(i));
 	}
 
 	protected abstract void PrintResult(LinkedList<Node> result); // different interpretations
