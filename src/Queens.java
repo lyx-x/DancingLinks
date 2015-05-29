@@ -16,7 +16,7 @@ public class Queens extends Solver {
     public Queens(String file) throws FileNotFoundException {
         this(new FileReader(file));
     }
-    public Queens(Reader stream){
+    public Queens(Reader stream) {
         BufferedReader reader = new BufferedReader(stream);
         try {
             dimBoard = Integer.parseInt(reader.readLine());
@@ -24,21 +24,20 @@ public class Queens extends Solver {
             column = dimBoard * 6 - 2;
             matrix = new boolean[row][column];
             secondaries = column - 4 * dimBoard;
-            for(int i = 0; i < dimBoard; i++){
-                for(int j = 0; j < dimBoard; j++){
+            for(int i = 0; i < dimBoard; i++)
+                for(int j = 0; j < dimBoard; j++) {
                     matrix[i * dimBoard + j][i] = true;
                     matrix[i * dimBoard + j][dimBoard + j] = true;
                     matrix[i * dimBoard + j][2 * dimBoard + i - j + dimBoard - 1] = true;
                     matrix[i * dimBoard + j][4 * dimBoard - 1 + i + j] = true;
                 }
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void PrintResult(LinkedList<Node> result){
+    protected void PrintResult(LinkedList<Node> result) {
         result.forEach(node -> System.out.format("%d %d\n", (node.N - 1) / dimBoard, (node.N - 1) % dimBoard));
     }
 
