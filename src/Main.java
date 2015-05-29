@@ -4,7 +4,7 @@ public class Main {
 
 	final static String EMCFile = "tests/emc/queens8.txt";
 	final static String SudokuFile = "tests/sudoku/sudoku16_0.txt";
-	final static String PavageFile = "tests/pavage/mutilated_chessboard4.txt";
+	final static String PavageFile = "tests/pavage/scott.txt";
 
 	public static void main(String[] args) {
 		switch (args.length) {

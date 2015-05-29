@@ -1,4 +1,3 @@
-import javafx.util.Pair;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,8 +13,20 @@ public class Pavage extends Solver {
     private int pieceCount;
     private SortedSet<String> possibilities;
     private LinkedList<Piece> pieces;
-    private LinkedList<Pair<Integer, Integer>> pavage;
+    private LinkedList<Coordinate> pavage;
     private Color[] colors = {Color.CYAN, Color.GREEN, Color.BLUE, Color.DARK_GRAY, Color.MAGENTA, Color.GRAY, Color.ORANGE, Color.LIGHT_GRAY, Color.PINK, Color.BLACK, Color.RED, Color.YELLOW};
+
+    private class Coordinate {
+
+        public int x;
+        public int y;
+
+        public Coordinate(int _x, int _y) {
+            x = _x;
+            y = _y;
+        }
+
+    }
 
     private class Position {
 
@@ -25,8 +36,16 @@ public class Pavage extends Solver {
         public Position(int _index, int x, int y, int[][] offset) {
             index = _index;
             positions = new int[offset.length];
-            for (int i = 0; i < offset.length; i++)
-                positions[i] = pavage.indexOf(new Pair<>(x + offset[i][0], y + offset[i][1]));
+            for (int i = 0; i < offset.length; i++) {
+                int _i = 0;
+                for (Coordinate coordinate : pavage) {
+                    if (coordinate.x == x + offset[i][0] && coordinate.y == y + offset[i][1]) {
+                        positions[i] = _i;
+                        break;
+                    }
+                    _i++;
+                }
+            }
         }
 
         @Override
@@ -125,7 +144,7 @@ public class Pavage extends Solver {
                 for (int j = 0; j < width; j++)
                     if (tmp.charAt(j) == '*') {
                         board[j][i] = true;
-                        pavage.add(new Pair<>(j, i));
+                        pavage.add(new Coordinate(j, i));
                     }
             }
             pieceCount = Integer.parseInt(reader.readLine());
@@ -178,8 +197,8 @@ public class Pavage extends Solver {
                 }
             for (int i = 0; i < pavage.size(); i++) // find position
                 if (matrix[r][i]) {
-                    Pair<Integer, Integer> pos = pavage.get(i);
-                    resultBoard[pos.getKey()][pos.getValue()] += index; // mark the square with a symbol
+                    Coordinate pos = pavage.get(i);
+                    resultBoard[pos.x][pos.y] += index; // mark the square with a symbol
                 }
         });
         StringBuilder sb = new StringBuilder();
@@ -292,8 +311,8 @@ public class Pavage extends Solver {
                         }
                     for (int i = 0; i < pavage.size(); i++)
                         if (matrix[r][i]) {
-                            Pair<Integer, Integer> pos = pavage.get(i);
-                            pavageLabels[pos.getKey()][pos.getValue()].setBackground(colors[_index % 12]); // set different color
+                            Coordinate pos = pavage.get(i);
+                            pavageLabels[pos.x][pos.y].setBackground(colors[_index % 12]); // set different color
                         }
                 });
             }
