@@ -2,7 +2,7 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-	final static String EMCFile = "tests/emc/queens8.txt";
+	final static String EMCFile = "tests/emc/sujet.txt";
 	final static String SudokuFile = "tests/sudoku/sudoku16_0.txt";
 	final static String PavageFile = "tests/pavage/scott.txt";
 	final static String QueensFile = "tests/queens/queens8.txt";
@@ -14,10 +14,10 @@ public class Main {
 					System.out.println("Default Test:");
 					System.out.println(EMCFile);
 					new EMC(EMCFile).RunTest();
-					System.out.println(SudokuFile);
-					new Sudoku(SudokuFile).RunTest();
 					System.out.println(PavageFile);
 					new Pavage(PavageFile).RunTest();
+					System.out.println(SudokuFile);
+					new Sudoku(SudokuFile).RunTest();
 					System.out.println(QueensFile);
 					new Queens(QueensFile).RunTest();
 				} catch (FileNotFoundException e) {

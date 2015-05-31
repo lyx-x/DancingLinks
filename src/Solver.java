@@ -9,10 +9,25 @@ public abstract class Solver {
 	protected LinkedList<LinkedList<Node>> results = new LinkedList<>();
 
 	public void Run() {
+		long tStart = System.currentTimeMillis();
 		DLXSearcher dlx = new DLXSearcher(matrix, row, column, secondaries);
 		dlx.Run();
 		System.out.println(dlx.GetResultCount());
+		long tEnd = System.currentTimeMillis();
+		long tDelta = tEnd - tStart;
+		double elapsedSeconds = tDelta / 1000.0;
 		results = dlx.GetResult();
+		// Only for test
+		/*
+		int count = 0;
+		for (int i = 0; i < row; i++)
+			for (int j = 0; j < column; j++)
+				if (matrix[i][j])
+					count++;
+		System.err.format("Time elapsed: %f s.\n", elapsedSeconds);
+		System.err.format("Matrix: %d * %d.\n", row, column);
+		System.err.format("%f per row, %f per column.\n", count / (float)row, count / (float)column);
+		*/
 	}
 
 	public void RunDemo() {

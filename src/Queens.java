@@ -107,6 +107,7 @@ public class Queens extends Solver {
             submit.setEnabled(false);
             chooseLabel.setText("Nothing to show.");
         }
+
         submit.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -142,8 +143,14 @@ public class Queens extends Solver {
             for (int j = 0; j < dimBoard; j++) {
                 JLabel numberLabel = new JLabel();
                 numberLabels[i][j] = numberLabel;
-                numberLabel.setBackground(Color.getHSBColor(0.3f, 0.2f, 1f));
-                numberLabel.setForeground(Color.getHSBColor(1f, 0.7f, 0.4f));
+                if ((i + j) % 2 == 0) {
+                    numberLabel.setBackground(Color.WHITE);
+                    numberLabel.setForeground(Color.BLACK);
+                }
+                else {
+                    numberLabel.setBackground(Color.BLACK);
+                    numberLabel.setForeground(Color.WHITE);
+                }
                 numberLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20 * 16 / dimBoard));
                 numberLabel.setOpaque(true);
                 if (i == 0) {
