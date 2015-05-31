@@ -2,10 +2,10 @@ import java.io.FileNotFoundException;
 
 public class Main {
 
-	final static String EMCFile = "tests/emc/sujet.txt";
-	final static String SudokuFile = "tests/sudoku/sudoku16_0.txt";
-	final static String PavageFile = "tests/pavage/scott.txt";
-	final static String QueensFile = "tests/queens/queens8.txt";
+	final static String EMCFile = "../tests/emc/sujet.txt";
+	final static String SudokuFile = "../tests/sudoku/sudoku16_0.txt";
+	final static String PavageFile = "../tests/pavage/scott.txt";
+	final static String QueensFile = "../tests/queens/queens8.txt";
 
 	public static void main(String[] args) {
 		switch (args.length) {
